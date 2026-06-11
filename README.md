@@ -1,8 +1,8 @@
 # Counselor Claude / 心理咨询师 Claude
 
-基于 [Counselor-Agent](https://github.com/RTyyyy/Counselor-Agent) 的 Claude Code 移植版。由 Claude Code 直接担任整合式心理咨询师，负责对话、个案概念化、治疗计划制定与跟踪。延续原项目的 15 个治疗技能体系、14 领域用户画像系统和 Chroma 向量数据库。
+基于 [Counselor-Agent](https://github.com/Rtyyy233/psycho-counselor-agent) 的 Claude Code 移植版。由 Claude Code 直接担任整合式心理咨询师，负责对话、个案概念化、治疗计划制定与跟踪。延续原项目的 15 个治疗技能体系、14 领域用户画像系统和 Chroma 向量数据库。
 
-A Claude Code port of [Counselor-Agent](https://github.com/RTyyyy/Counselor-Agent). Claude Code directly serves as the therapist — conducting sessions, formulating treatment plans, and tracking continuity across sessions. Preserves the original project's 15-skill therapy framework, 14-domain profile system, and Chroma database.
+A Claude Code port of [Counselor-Agent](https://github.com/Rtyyy233/psycho-counselor-agent). Claude Code directly serves as the therapist — conducting sessions, formulating treatment plans, and tracking continuity across sessions. Preserves the original project's 15-skill therapy framework, 14-domain profile system, and Chroma database.
 
 ---
 
@@ -51,13 +51,21 @@ counselor-claude/
 
 ### 核心设计 / Core Design
 
-**治疗师直接承担所有角色。** 不需要 LangChain Agent、不需要独立的 Supervisor、不需要 DeepSeek。Claude Code 在对话中同时完成共情回应和自我监测。技能文件按需加载——先读 INDEX 看触发条件，再精准打开匹配的那一个，而不是把所有内容塞进 prompt。
+**单一治疗师模式。** Claude Code 在对话中同时完成共情回应和自我监测——无需多 Agent 协作，治疗与督导在同一推理过程中自然融合。技能文件按需加载：先读取 INDEX 了解触发条件，再精准打开匹配的 `.md` 文件，避免将所有内容预载入上下文。
 
-**The therapist handles everything.** No separate agents. Claude Code empathizes with the client while self-monitoring alliance quality, process quality, and plan fidelity in the same turn. Skills are loaded on demand — read the INDEX for trigger conditions, then open the specific `.md` file that matches, rather than pre-loading all 15 into context.
+**Single-therapist model.** Claude Code empathizes and self-monitors in the same reasoning pass — therapy and supervision are not separate processes but a single coherent clinical judgment. Skills load on demand: read the INDEX for triggers, then open only the matching skill file.
 
 **跨会话治疗连续性。** 每次启动自动加载：上次会话状态（`memory/session-state.md`）、治疗计划（`database/treatment_plans/`）、用户画像（`database/profiles/`）、最近 PAIP 摘要（Chroma）。会话中每 3-5 轮自动存储 PAIP。会话结束时更新状态、计划、画像。
 
-**Cross-session continuity.** On startup, automatically loads: last session state, treatment plan, user profile, recent PAIP summaries. Stores updated PAIP every 3-5 turns during session. Updates state, plan, and profile at session end.
+**Cross-session continuity.** On startup, automatically loads: last session state, treatment plan, user profile, recent PAIP summaries. Stores PAIP every 3-5 turns. Updates state, plan, and profile at session end.
+
+**四阶段治疗模型。** 建立期（engagement）→ 工作期-认知行为（cognitive_behavioral）→ 工作期-情感深化（emotional_deepening）→ 整合/收尾期（consolidation）。每个阶段有默认推荐方法，阶段切换需满足目标达成率 + 联盟稳固 + 无危机信号三个条件。
+
+**Four-stage treatment model.** engagement → cognitive_behavioral → emotional_deepening → consolidation. Each stage has default method recommendations. Stage transitions require goal progress ≥ 60%, solid alliance, and no active crisis.
+
+**言语强度校准。** 纯文字交流缺乏语调、表情、肢体语言等信号，LLM 容易将情绪词汇等同于临床严重度。系统内置校准机制：行为证据优先于词汇强度，危机干预和深度情绪工作需同时满足多个行为层面条件才激活。
+
+**Verbal-intensity calibration.** Text-only communication lacks tone, facial expressions, and body language — LLMs tend to equate strong words with clinical severity. The system calibrates by requiring behavioral evidence (not just vocabulary) before activating crisis or deep-emotion interventions.
 
 ---
 
