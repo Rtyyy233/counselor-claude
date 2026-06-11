@@ -1,0 +1,1 @@
+- [Session State](session-state.md) — Current treatment stage, goals progress, pending items, intervention history. Updated at end of each session.

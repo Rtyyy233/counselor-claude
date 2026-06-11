@@ -1,0 +1,22 @@
+# Environment / API keys
+.env
+
+# Database contents — keep directory structure, ignore data
+database/*
+!database/.gitkeep
+!database/profiles/
+!database/treatment_plans/
+database/profiles/*
+!database/profiles/.gitkeep
+database/treatment_plans/*
+!database/treatment_plans/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db

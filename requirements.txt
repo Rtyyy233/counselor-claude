@@ -1,0 +1,6 @@
+chromadb
+langchain-ollama
+langchain-core
+langchain-deepseek
+pydantic
+python-dotenv
